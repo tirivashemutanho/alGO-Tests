@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <div class="registration-form">
+    <section class="registration-form">
         <h1 class="form-header">Students Registration Portal</h1>
         <form method="POST" enctype="multipart/form-data">
             <div class="row">
@@ -49,10 +49,10 @@
                 <div class="input100">
                     <select name="program" title="program" required>
                         <option value="" disabled selected hidden>Select Program of Study</option>
-                        <option value="computer_science">Computer Science</option>
-                        <option value="business_administration">Business Administration</option>
-                        <option value="biology">Biology</option>
-                        <option value="mathematics">Engineering</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Mathematics">Engineering</option>
                         <option value="Engineering">Law</option>
                         <option value="Medicine">Agriculture</option>
                     </select>
@@ -66,7 +66,8 @@
             <div class="row">
                 <div class="input100 input-check">
                     <label for="accommodatio">Would you like On-Campus Accommodation</label>
-                    <input type="checkbox" id="accommodation" name="accommodation" title="accommodation" required>
+                    <input type="checkbox" id="accommodation" name="accommodation" title="accommodation" Value={{True}} >
+                    <input type="hidden" name="accommodation" value="False"> 
                 </div>
             </div>
             <div class="row">
@@ -87,5 +88,62 @@
                 </div>
             </div>
         </form>
-</body>
+    </section>
+    <section class="students-show">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>D.O.B</th>
+                    <th>Gender</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Program</th>
+                    <th>GPA</th>
+                    <th>Accomodation</th>
+                    <th>Academic Transcripts</th>
+                    <th>Peronal document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{student.firstname}}</td>
+                    <td>{{student.lastname}}</td>
+                    <td>{{student.date_of_birth}}</td>
+                    <td>{{student.gender}}</td>
+                    <td>{{student.contact_number}}</td>
+                    <td>{{student.email}}</td>
+                    <td>{{student.address}}</td>
+                    <td>{{student.program}}</td>
+                    <td>{{student.gpa}}</td>
+                    <td>{{student.accommodation}}</td>
+                    <td>
+                        {% if student.academic_transcripts_unique_filename %}
+                          <a href="{{ url_for('uploaded_file', filename=student.academic_transcripts_unique_filename) }}">{{ student.academic_transcripts_unique_filename }}</a>
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if student.personal_doc_unique_filename %}
+                          <a href="{{ url_for('uploaded_file', filename=student.personal_doc_unique_filename) }}">{{ student.personal_doc_unique_filename }}</a>
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                </tr>
+                {% endfor %}           
+            </tbody> 
+        </table>
+
+    </section>
+
+
+
+
 </html>
