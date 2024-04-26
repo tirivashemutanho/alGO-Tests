@@ -1,0 +1,84 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.registration-form{
+    position: relative;
+    background: #f9f9f9;
+    background: #ffe;
+    width: 50%;
+    padding: 20px;
+
+}
+form{
+    width: 100%;
+    padding: 10px;
+}
+.form-header{
+    width: 100%;
+    text-align: center;
+    background: teal;
+    color: #fff;
+    padding: 20px;
+}
+.registration-form .row{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+.registration-form .input50{
+    width: 50%;
+    margin: 0 10px;
+}
+.registration-form .input100{
+    width: 100%;
+    margin: 0 10px;
+}
+.registration-form .row input, 
+.registration-form .row select,  
+.input-check,
+.registration-form .row textarea{
+    position: relative;
+    border: 1px solid rgba(0,0 , 0, 0.2);
+    color: #000;
+    background: transparent;
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    font-size: 16px;
+    font-weight: 300;
+    margin: 10px 10px;
+    resize: none;
+}
+.registration-form .row select option{
+    background: #ffe;
+    border: 3px solid teal;
+}
+.registration-form .row textarea{
+    height: 150px;
+}
+.registration-form .row input[type="submit"]{
+    background: teal;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 300;
+    border: 0;
+    cursor: pointer;
+}
+.input-check{
+    border: 1px solid rgba(0,0 , 0, 0.2);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+.input-check label {
+  flex: 7;
+}
+
+.input-check input[type="checkbox"] {
+  flex: 1;
+}
