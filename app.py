@@ -101,8 +101,6 @@ def index():
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     return send_from_directory('uploads', filename)
-
-# portal route
 secret_key = str(uuid.uuid4())
 app.secret_key = secret_key
 
@@ -110,20 +108,17 @@ app.secret_key = secret_key
 def portal():
     all_students = students.find({})
     sort_by = session.get("sort_by")
-    program = session.get("program")
     sort_order = session.get("sort_order")
 
     if request.method == "POST":
         sort_by = request.form.get("sort_by")
-        program = request.form.get("program")
         sort_order = request.form.get("sort_order")
 
         # Store the sorting parameters in session variables
         session["sort_by"] = sort_by
-        session["program"] = program
         session["sort_order"] = sort_order
 
-    if sort_by and program and sort_order:
+    if sort_by and sort_order:
         # Sort the students based on the selected criteria
         all_students = sorted(all_students, key=itemgetter(sort_by))
         # Reverse the order if descending is selected
@@ -131,8 +126,6 @@ def portal():
             all_students = list(reversed(all_students))
 
     return render_template('portal.html', students=all_students)
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
