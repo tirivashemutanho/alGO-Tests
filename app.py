@@ -122,16 +122,10 @@ def portal():
         session["sort_order"] = sort_order
 
     if sort_by and sort_order:
-        # Convert the cursor object to a list
         all_students = list(all_students)
-
-        # Set a default value for sort_by if it is None
         sort_by = sort_by or "name"
-
-        # Sort the students based on the selected criteria
         all_students = sorted(all_students, key=itemgetter(sort_by))
-
-        # Reverse the order if descending is selected
+        
         if sort_order == "descending":
             all_students = list(reversed(all_students))
             

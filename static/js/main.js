@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortBy = document.getElementById('sort-by');
   const sortOrder = document.getElementById('sort-order');
 
-  // Add event listener for form submission
+  // Add change event listener for form submission
   sortAlgorithm.addEventListener('change', submitForm);
   sortBy.addEventListener('change', submitForm);
   sortOrder.addEventListener('change', submitForm);
