@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, send_from_directory, session
+from flask import Flask, render_template, request, url_for, redirect, send_from_directory, session, jsonify
 from pymongo import MongoClient
 import os
 import uuid
@@ -101,8 +101,11 @@ def index():
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     return send_from_directory('uploads', filename)
+
+
 secret_key = str(uuid.uuid4())
 app.secret_key = secret_key
+
 
 @app.route("/portal", methods=["GET", "POST"])
 def portal():
@@ -111,20 +114,27 @@ def portal():
     sort_order = session.get("sort_order")
 
     if request.method == "POST":
-        sort_by = request.form.get("sort_by")
-        sort_order = request.form.get("sort_order")
+        sort_by = request.json.get("sortBy")
+        sort_order = request.json.get("sortOrder")
 
         # Store the sorting parameters in session variables
         session["sort_by"] = sort_by
         session["sort_order"] = sort_order
 
     if sort_by and sort_order:
+        # Convert the cursor object to a list
+        all_students = list(all_students)
+
+        # Set a default value for sort_by if it is None
+        sort_by = sort_by or "name"
+
         # Sort the students based on the selected criteria
         all_students = sorted(all_students, key=itemgetter(sort_by))
+
         # Reverse the order if descending is selected
         if sort_order == "descending":
             all_students = list(reversed(all_students))
-
+            
     return render_template('portal.html', students=all_students)
 
 if __name__ == '__main__':

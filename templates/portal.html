@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students Portal</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='webfonts/fontawesome-free-6.5.2/css/all.min.css') }}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-    <script src="{{url_for('static', filename='js/main.js')}}"></script>
-    <script>
-        
-    </script>
+    
 </head>
 <body>
     <section class="query-form">
-        <form method="POST">
+        <form id="sorting-form" method="post" action="{{ url_for('portal') }}">
             <div class="query-col">
                 <div class="input-row">
-                    <select name="sort_algorithm" title="sort_algorithm">
+                    <select name="sort_algorithm" title="sort_algorithm" id="sort-algorithm">
                       <option value="" disabled selected hidden>Sorting Algorithm:</option>
                       <option value="bubble_sort">Bubble Sort</option>
                       <option value="selection_sort">Selection Sort</option>
@@ -40,8 +36,8 @@
             </div>
             <div class="row">
                 <div class="input-row">
-                    <select name="sort_by" title="sort_by">
-                      <option value="" disabled selected hidden>Sort by:</option>
+                    <select name="sort_by" title="sort_by" id="sort-by">
+                      <option value="firstname" disabled selected hidden>Sort by:</option>
                       <option value="firstname">Firstname</option>
                       <option value="lastname">Lastname</option>
                       <option value="date_of_birth">D.O.B</option>
@@ -57,7 +53,7 @@
             </div>
             <div class="row">
                 <div class="input-row">
-                    <select name="sort_order" title="sort_order">
+                    <select name="sort_order" title="sort_order" id="sort-order">
                       <option value="ascending" selected>Ascending</option>
                       <option value="descending">Descending</option>
                     </select>
@@ -117,6 +113,6 @@
         </tbody> 
         </table>
     </section>
-
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </body>
 </html>
