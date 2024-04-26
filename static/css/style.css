@@ -95,7 +95,7 @@ form{
 }
 .table{
     width: 90%;
-    margin-top: 2rem;
+    margin-top: 0;
     border-collapse: collapse;
     border-spacing: 0;
     background: #ffe;
@@ -124,6 +124,7 @@ form{
 
 /* Query Form Styles */
 .query-form{
+    margin: 0;
     width: 100%;
     background: teal;
     display: flex;
@@ -133,7 +134,7 @@ form{
 }
 .query-form form{
     width: 100%;
-    background: #ffe;
+    
     display: flex;
     justify-content: space-around;
     align-items: center;
