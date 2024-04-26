@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='webfonts/fontawesome-free-6.5.2/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"> 
+</head>
+<body>
+    
+    <section class="query-form">
+        <form method="POST">
+            <div class="query-col">
+                <div class="input-row">
+                    <select name="sort_algorithm" title="sort_algorithm">
+                        <option value="" disabled selected hidden>Sorting Algorithm:</option>
+                        <option value="bubble_sort">Bubble Sort</option>
+                        <option value="selection_sort">Selection Sort</option>
+                        <option value="insertion_sort">Insertion Sort</option>
+                        <option value="merge_sort">Merge Sort</option>
+                        <option value="quick_sort">Quick Sort</option>
+                        <option value="heap_sort">Heap Sort</option>
+                        <option value="radix_sort">Radix Sort</option>
+                        <option value="shell_sort">Shell Sort</option>
+                        <option value="bucket_sort">Bucket Sort</option>
+                        <option value="counting_sort">Counting Sort</option>
+                        <option value="cycle_sort">Cycle Sort</option>
+                        <option value="comb_sort">Comb Sort</option>
+                        <option value="gnome_sort">Gnome Sort</option>
+                        <option value="cocktail_sort">Cocktail Sort</option>
+                        <option value="odd_even_sort">Odd-Even Sort</option>
+                        <option value="tim_sort">Tim Sort</option>
+                        <option value="bitonic_sort">Bitonic Sort</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-row">
+                    <select name="sort_by" title="sort_by">
+                        <option value="" disabled selected hidden>Sort by:</option>
+                        <option value="firstname">Firstname</option>
+                        <option value="lastname">Lastname</option>
+                        <option value="date_of_birth">D.O.B</option>
+                        <option value="gender">Gender</option>
+                        <option value="contact_number">Contact Number</option>
+                        <option value="email">Email</option>
+                        <option value="address">Address</option>
+                        <option value="program">Program</option>
+                        <option value="gpa">GPA</option>
+                        <option value="accomodation">Accomodation</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+              <div class="input-row">
+                  <select name="sort_order" title="sort_order">
+                      <option value="ascending" selected>Ascending</option>
+                      <option value="descending">Descending</option>
+                  </select>
+              </div>
+          </div>
+        </form>
+    </section>
+    <section class="students-show">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>D.O.B</th>
+                    <th>Gender</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Program</th>
+                    <th>GPA</th>
+                    <th>Accomodation</th>
+                    <th>Academic Transcripts</th>
+                    <th>Peronal document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{student.firstname}}</td>
+                    <td>{{student.lastname}}</td>
+                    <td>{{student.date_of_birth}}</td>
+                    <td>{{student.gender}}</td>
+                    <td>{{student.contact_number}}</td>
+                    <td>{{student.email}}</td>
+                    <td>{{student.address}}</td>
+                    <td>{{student.program}}</td>
+                    <td>{{student.gpa}}</td>
+                    <td>{{student.accommodation}}</td>
+                    <td>
+                        {% if student.academic_transcripts_unique_filename %}
+                          <a href="{{ url_for('uploaded_file', filename=student.academic_transcripts_unique_filename) }}">{{ student.academic_transcripts_unique_filename }}</a>
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if student.personal_doc_unique_filename %}
+                          <a href="{{ url_for('uploaded_file', filename=student.personal_doc_unique_filename) }}">{{ student.personal_doc_unique_filename }}</a>
+                        {% else %}
+                          N/A
+                        {% endif %}
+                      </td>
+                </tr>
+                {% endfor %}           
+            </tbody> 
+        </table>
+
+    </section>
+
+
+
+
+</html>
