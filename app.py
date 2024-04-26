@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, send_from_directory
 from pymongo import MongoClient
 import os
 import uuid
 from werkzeug.utils import secure_filename
-
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -16,14 +15,17 @@ files_collection = db.files
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def create_upload_folder():
     upload_path = app.config['UPLOAD_FOLDER']
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
 
+
 def create_files_collection():
     if 'files' not in db.list_collection_names():
         db.create_collection('files')
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -31,18 +33,23 @@ def index():
     create_files_collection()
 
     if request.method == "POST":
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        date_of_birth = request.form['date_of_birth']
-        gender = request.form['gender']
-        contact_number = request.form['contact_number']
-        email = request.form['email']
-        address = request.form['address']
-        program = request.form['program']
-        gpa = request.form['gpa']
-        accommodation = request.form.get('accommodation', False)
+        # Get form data
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
+        date_of_birth = request.form.get('date_of_birth')
+        gender = request.form.get('gender')
+        contact_number = request.form.get('contact_number')
+        email = request.form.get('email')
+        address = request.form.get('address')
+        program = request.form.get('program')
+        gpa = request.form.get('gpa')
+        accommodation = request.form.get('accommodation') == 'True'  # Check if checkbox is checked
         academic_transcripts = request.files.get('academic_transcripts')
         personal_doc = request.files.get('personal_doc')
+
+        # Validate required fields
+        if not firstname or not lastname or not email:
+            return "Please provide required information."
 
         # Handling uploads
         files = []
@@ -63,11 +70,37 @@ def index():
 
         if files:
             db.files.insert_many(files)
-            students.insert_one({'firstname': firstname, 'lastname': lastname, 'date_of_birth': date_of_birth, 'gender': gender, 'contact_number':contact_number, 'email':email, 'address':address, 'program':program, 'gpa': gpa, 'accommodation':accommodation, 'personal_doc_unique_filename': personal_doc_unique_filename, 'academic_transcripts_unique_filename': academic_transcripts_unique_filename})
-            return redirect(url_for('index'))
-            
-    all_students = students.find()
+
+        # Insert student data into the database
+        student_data = {
+            'firstname': firstname,
+            'lastname': lastname,
+            'date_of_birth': date_of_birth,
+            'gender': gender,
+            'contact_number': contact_number,
+            'email': email,
+            'address': address,
+            'program': program,
+            'gpa': gpa,
+            'accommodation': accommodation,
+            'personal_doc_unique_filename': personal_doc_unique_filename,
+            'personal_doc_filename': personal_doc_filename,
+            'academic_transcripts_unique_filename': academic_transcripts_unique_filename,
+            'academic_transcripts_filename': academic_transcripts_filename
+        }
+        students.insert_one(student_data)
+
+        return redirect(url_for('index'))
+
+    all_students = students.find({})
     return render_template('index.html', students=all_students)
+
+
+
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory('uploads', filename)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
