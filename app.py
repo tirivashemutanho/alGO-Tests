@@ -4,6 +4,7 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from operator import itemgetter
+from bson import ObjectId
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -107,29 +108,39 @@ secret_key = str(uuid.uuid4())
 app.secret_key = secret_key
 
 
-@app.route("/portal", methods=["GET", "POST"])
-def portal():
+@app.route("/portal", methods=["GET"])
+def render_portal():
     all_students = students.find({})
-    sort_by = session.get("sort_by")
-    sort_order = session.get("sort_order")
+    
+    # Convert cursor object to a list of dictionaries and convert ObjectId to string
+    all_students = list(all_students)
+    all_students = [{**student, "_id": str(student["_id"])} for student in all_students]
 
-    if request.method == "POST":
-        sort_by = request.json.get("sortBy")
-        sort_order = request.json.get("sortOrder")
+    return render_template("portal.html", students=all_students)
 
-        # Store the sorting parameters in session variables
-        session["sort_by"] = sort_by
-        session["sort_order"] = sort_order
+@app.route("/sort", methods=["POST"])
+def sort_data():
+    all_students = students.find({})
+    sort_by = request.json.get("sortBy")
+    sort_order = request.json.get("sortOrder")
+
+    # Store the sorting parameters in session variables
+    session["sort_by"] = sort_by
+    session["sort_order"] = sort_order
 
     if sort_by and sort_order:
-        all_students = list(all_students)
-        sort_by = sort_by or "name"
-        all_students = sorted(all_students, key=itemgetter(sort_by))
-        
-        if sort_order == "descending":
-            all_students = list(reversed(all_students))
-            
-    return render_template('portal.html', students=all_students)
+        sort_by = sort_by or "firstname"
+        # Sort the students list based on the sort_by key
+        all_students = sorted(all_students, key=lambda x: x[sort_by])
 
+        if sort_order == "descending":
+            # Reverse the list if the sort_order is "descending"
+            all_students = list(reversed(all_students))
+
+    # Convert cursor object to a list of dictionaries and convert ObjectId to string
+    all_students = list(all_students)
+    all_students = [{**student, "_id": str(student["_id"])} for student in all_students]
+
+    return jsonify(all_students)
 if __name__ == '__main__':
     app.run(debug=True)

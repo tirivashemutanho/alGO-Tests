@@ -9,7 +9,7 @@
 </head>
 <body>
     <section class="query-form">
-        <form id="sorting-form" method="post" action="{{ url_for('portal') }}">
+        <form id="sorting-form" method="post" action="{{ url_for('render_portal') }}">
             <div class="query-col">
                 <div class="input-row">
                     <select name="sort_algorithm" title="sort_algorithm" id="sort-algorithm">
@@ -47,7 +47,7 @@
                       <option value="address">Address</option>
                       <option value="program">Program</option>
                       <option value="gpa">GPA</option>
-                      <option value="accomodation">Accomodation</option>
+                   
                     </select>
                 </div>
             </div>

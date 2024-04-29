@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortOrder = document.getElementById('sort-order');
 
   // Add change event listener for form submission
-  sortAlgorithm.addEventListener('change', submitForm);
+  sortingForm.addEventListener('submit', submitForm);
+  // sortAlgorithm.addEventListener('change', submitForm);
   sortBy.addEventListener('change', submitForm);
   sortOrder.addEventListener('change', submitForm);
 
@@ -17,23 +18,60 @@ document.addEventListener('DOMContentLoaded', () => {
       sortBy: sortBy.value,
       sortOrder: sortOrder.value
     };
-    console.log(JSON.stringify(requestData));
-    fetch('/portal', {
+  
+    fetch('/sort', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestData)
     })
-    .then(response => {
-      if (response.ok) {
-        console.log('Request successful');
-      } else {
-        throw new Error('Request failed');
-      }
-    })
-    .catch(error => {
-      console.error('Request error:', error);
-    });
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Request failed');
+        }
+      })
+      .then(data => {
+        updateTable(data);
+      })
+      .catch(error => {
+        console.error('Request error:', error);
+        // Handle the error here, e.g., display an error message to the user
+      });
   }
+
+function updateTable(data) {
+  const tableBody = document.querySelector("#student-table tbody");
+
+  // Clear existing rows from the table
+  tableBody.innerHTML = '';
+  num = 0
+  // Append sorted rows back to the table
+  data.forEach(student => {
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+    <td>${ num ++ }</td>
+    <td>${student.firstname}</td>
+    <td>${student.lastname}</td>
+    <td>${student.date_of_birth}</td>
+    <td>${student.gender}</td>
+    <td>${student.contact_number}</td>
+    <td>${student.email}</td>
+    <td>${student.address}</td>
+    <td>${student.program}</td>
+    <td>${student.gpa}</td>
+    <td>${student.accommodation}</td>
+    <td>
+          <a href="uploads/${student.academic_transcripts_unique_filename}">${ student.academic_transcripts_unique_filename }</a>
+    </td>
+    <td>
+          <a href="uploads/${student.personal_doc_unique_filename}">${ student.personal_doc_unique_filename }</a>
+    </td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
 });
