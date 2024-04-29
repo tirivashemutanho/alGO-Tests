@@ -5,6 +5,9 @@ import uuid
 from werkzeug.utils import secure_filename
 from operator import itemgetter
 from bson import ObjectId
+from time import time, perf_counter
+from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list
+
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -120,27 +123,50 @@ def render_portal():
 
 @app.route("/sort", methods=["POST"])
 def sort_data():
-    all_students = students.find({})
+    all_students = list(students.find({}))
     sort_by = request.json.get("sortBy")
     sort_order = request.json.get("sortOrder")
+    sort_algorithm = request.json.get("sortAlgorithm")
+    
+    sort_by = 'firstname' if sort_by == "" else sort_by
+    sort_algorithm = 'bubble_sort' if sort_algorithm == "" else sort_algorithm
 
     # Store the sorting parameters in session variables
     session["sort_by"] = sort_by
     session["sort_order"] = sort_order
+    session["sort_algorithm"] = sort_algorithm
+    
 
-    if sort_by and sort_order:
-        sort_by = sort_by or "firstname"
-        # Sort the students list based on the sort_by key
-        all_students = sorted(all_students, key=lambda x: x[sort_by])
+    if sort_by and sort_order and sort_algorithm:
+        # sort_by = sort_by or "firstname"
+        # sort_algorithm = sort_algorithm or "bubble_sort"
+       
+      
+      
+        if sort_algorithm == 'bubble_sort':
+            all_students = bubble_sort(all_students, sort_by)
+        elif sort_algorithm == 'selection_sort':
+            all_students = selection_sort(all_students, sort_by)
+        elif sort_algorithm == 'insertion_sort':
+            all_students = insertion_sort(all_students, sort_by)
+        elif sort_algorithm == 'quick_sort':
+            all_students = quick_sort(all_students, sort_by)
+        elif sort_algorithm == 'merge_sort':
+            all_students = merge_sort(all_students, sort_by)
+        else:
+            return jsonify(error='Invalid sort algorithm')
+        
 
         if sort_order == "descending":
             # Reverse the list if the sort_order is "descending"
-            all_students = list(reversed(all_students))
+            all_students = reverse_list(list(all_students))
 
     # Convert cursor object to a list of dictionaries and convert ObjectId to string
-    all_students = list(all_students)
     all_students = [{**student, "_id": str(student["_id"])} for student in all_students]
 
     return jsonify(all_students)
+
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    

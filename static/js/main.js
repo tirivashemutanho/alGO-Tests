@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add change event listener for form submission
   sortingForm.addEventListener('submit', submitForm);
-  // sortAlgorithm.addEventListener('change', submitForm);
+  sortAlgorithm.addEventListener('change', submitForm);
   sortBy.addEventListener('change', submitForm);
   sortOrder.addEventListener('change', submitForm);
 
   function submitForm(e) {
     e.preventDefault();
     const requestData = {
-      algorithm: sortAlgorithm.value,
+      sortAlgorithm: sortAlgorithm.value,
       sortBy: sortBy.value,
       sortOrder: sortOrder.value
     };
@@ -47,7 +47,7 @@ function updateTable(data) {
 
   // Clear existing rows from the table
   tableBody.innerHTML = '';
-  num = 0
+  num = 1
   // Append sorted rows back to the table
   data.forEach(student => {
     const row = document.createElement('tr');
