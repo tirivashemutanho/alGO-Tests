@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from operator import itemgetter
 from bson import ObjectId
 from time import time, perf_counter
-from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list, linear_search
+from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list, linear_search, binary_search
 
 
 app = Flask(__name__)
@@ -174,7 +174,7 @@ def search_data():
     matching_students = []  # Initialize with an empty list
 
     if search_term:
-        matching_students = linear_search(all_students, search_term)
+        matching_students = binary_search(all_students, search_term)
         matching_students = [{**student, "_id": str(student["_id"])} for student in matching_students]
     else:
         matching_students = students

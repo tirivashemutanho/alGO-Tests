@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sortBy.addEventListener('change', submitForm);
   sortOrder.addEventListener('change', submitForm);
   search.addEventListener('keyup', searchStudent);
+  search.addEventListener('event.key === "Enter"', searchStudent);
 
   function submitForm(e) {
     e.preventDefault();
@@ -67,12 +68,7 @@ function updateTable(data) {
     <td>${student.program}</td>
     <td>${student.gpa}</td>
     <td>${student.accommodation}</td>
-    <td>
-          <a href="uploads/${student.academic_transcripts_unique_filename}">${ student.academic_transcripts_unique_filename }</a>
-    </td>
-    <td>
-          <a href="uploads/${student.personal_doc_unique_filename}">${ student.personal_doc_unique_filename }</a>
-    </td>
+  
     `;
     tableBody.appendChild(row);
   })}else{

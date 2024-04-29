@@ -100,18 +100,7 @@ def reverse_list(lst):
 
 
 
-# def linear_search(students, search_string):
-#     matching_students = []
-#     if search_string == "":
-#         return students
 
-#     for student in students:
-#         if search_string.lower() in student["firstname"].lower() or \
-#            search_string.lower() in student["lastname"].lower() :
-#             matching_students.append(student)
-        
-
-#     return matching_students
 
 def linear_search(students, search_string):
     matching_students = []
@@ -119,8 +108,62 @@ def linear_search(students, search_string):
         return students  # Return all students if search string is empty
 
     for student in students:
-        if search_string.lower() in student.get("firstname", "").lower() or \
-           search_string.lower() in student.get("lastname", "").lower():
+        if search_string.lower() in str(student.get("firstname", "")).lower() or \
+           search_string.lower() in str(student.get("lastname", "")).lower() or \
+           search_string.lower() in str(student.get("date_of_birth", "")).lower() or \
+           search_string.lower() in str(student.get("gender", "")).lower() or \
+           search_string.lower() in str(student.get("contact_number", "")).lower() or \
+           search_string.lower() in str(student.get("email", "")).lower() or \
+           search_string.lower() in str(student.get("address", "")).lower() or \
+           search_string.lower() in str(student.get("program", "")).lower() or \
+           search_string.lower() in str(student.get("gpa", "")).lower() or \
+           search_string.lower() in str(student.get("accommodation", "")).lower():
             matching_students.append(student)
+
+    return matching_students
+
+# def binary_search(arr, target):
+
+#     left = 0
+#     right = len(arr) - 1
+
+#     while left <= right:
+#         mid = (left + right) // 2
+
+#         if arr[mid] == target:
+#             return mid
+#         elif arr[mid] < target:
+#             left = mid + 1
+#         else:
+#             right = mid - 1
+
+#     return -1
+
+def binary_search(students, search_term):
+    matching_students = []
+
+    left = 0
+    right = len(students) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+        student = students[mid]
+
+        if search_term.lower() in str(student.get("firstname", "")).lower() or \
+           search_term.lower() in str(student.get("lastname", "")).lower() or \
+           search_term.lower() in str(student.get("date_of_birth", "")).lower() or \
+           search_term.lower() in str(student.get("gender", "")).lower() or \
+           search_term.lower() in str(student.get("contact_number", "")).lower() or \
+           search_term.lower() in str(student.get("email", "")).lower() or \
+           search_term.lower() in str(student.get("address", "")).lower() or \
+           search_term.lower() in str(student.get("program", "")).lower() or \
+           search_term.lower() in str(student.get("gpa", "")).lower() or \
+           search_term.lower() in str(student.get("accommodation", "")).lower():
+            matching_students.append(student)
+
+        if search_term.lower() < str(student.get("firstname", "")).lower():
+            right = mid - 1
+        else:
+            left = mid + 1
 
     return matching_students

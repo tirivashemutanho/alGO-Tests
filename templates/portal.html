@@ -10,12 +10,7 @@
 <body>
   
     <section class="query-form">
-        <form action="" id="searching-form" method="POST">
-          <input type="text" placeholder="Search..." name="search_val" title="search_val" id="search-val">
-          <button type="button"><img src="../static/images/search.png" alt=""></button>
-        </form>
-        <div id="search-overlay"></div>
-
+    
         <form id="sorting-form" method="post" action="{{ url_for('render_portal') }}">
             <div class="query-col">
                 <div class="input-row">
@@ -67,6 +62,10 @@
                 </div>
             </div>
         </form>
+        <form action="" id="searching-form" method="POST">
+            <input type="text" placeholder="Search..." name="search_val" title="search_val" id="search-val">
+          </form>
+      
     </section>
     <section class="students-show">
         <table class="table" id="student-table">
@@ -82,9 +81,8 @@
                 <th>Address</th>
                 <th>Program</th>
                 <th>GPA</th>
-                <th>Accomodation</th>
-                <th>Academic Transcripts</th>
-                <th>Peronal document</th>
+                <th>Residence</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -101,20 +99,7 @@
                 <td>{{student.program}}</td>
                 <td>{{student.gpa}}</td>
                 <td>{{student.accommodation}}</td>
-                <td>
-                    {% if student.academic_transcripts_unique_filename %}
-                      <a href="{{ url_for('uploaded_file', filename=student.academic_transcripts_unique_filename) }}">{{ student.academic_transcripts_unique_filename }}</a>
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if student.personal_doc_unique_filename %}
-                      <a href="{{ url_for('uploaded_file', filename=student.personal_doc_unique_filename) }}">{{ student.personal_doc_unique_filename }}</a>
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
+
             </tr>
             {% endfor %}           
         </tbody> 
