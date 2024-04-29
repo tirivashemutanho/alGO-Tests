@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortBy = document.getElementById('sort-by');
   const sortOrder = document.getElementById('sort-order');
   const search = document.getElementById('search-val');
+  const searchAlgorithm = document.getElementById('search-algorithm');
 
   // Add change event listener for form submission
   sortingForm.addEventListener('submit', submitForm);
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sortOrder.addEventListener('change', submitForm);
   search.addEventListener('keyup', searchStudent);
   search.addEventListener('event.key === "Enter"', searchStudent);
+  searchAlgorithm.addEventListener('change', searchStudent);
 
   function submitForm(e) {
     e.preventDefault();
@@ -21,7 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
       sortBy: sortBy.value,
       sortOrder: sortOrder.value
     };
-  
+    
+    localStorage.setItem('sortAlgorithm', sortAlgorithm.value);
+    localStorage.setItem('sortBy', sortBy.value);
+    localStorage.setItem('sortOrder', sortOrder.value);
+    localStorage.setItem('searchAlgorithm', searchAlgorithm.value)
+
+
     fetch('/sort', {
       method: 'POST',
       headers: {
@@ -79,11 +87,73 @@ function updateTable(data) {
 }
 
 
+ // Retrieve stored values from local storage
+if (localStorage.getItem('sortAlgorithm')) {
+  sortAlgorithm.value = localStorage.getItem('sortAlgorithm');
+}
+
+if (localStorage.getItem('sortBy')) {
+  sortBy.value = localStorage.getItem('sortBy');
+}
+
+if (localStorage.getItem('sortOrder')) {
+  sortOrder.value = localStorage.getItem('sortOrder');
+}
+if (localStorage.getItem('searchAlgorithm')) {
+  searchAlgorithm.value = localStorage.getItem('searchAlgorithm');
+}
+
+
+const storedSortOrder = localStorage.getItem('sortOrder');
+const storedSortAlgorithm = localStorage.getItem('sortAlgorithm');
+const storedSortBy = localStorage.getItem('sortBy');
+const storedsearchAlgorithm = localStorage.getItem('searchAlgorithm');
+
+if (storedSortOrder) {
+  const requestData = {
+    sortAlgorithm: sortAlgorithm.value | storedSortAlgorithm,
+    sortBy: sortBy.value | storedSortBy,
+    sortOrder: sortOrder.value | storedSortOrder,
+    searchAlgorithm: searchAlgorithm.value | storedsearchAlgorithm
+  };
+
+  fetch('/sort', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestData)
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .then(data => {
+      updateTable(data);
+    })
+    .catch(error => {
+      console.error('Request error:', error);
+      // Handle the error here, e.g., display an error message to the user
+    });
+}
+
+
+
+
+
+
 
 
 function searchStudent(e) {
   const requestData = {
-    searchTerm: e.target.value
+    searchTerm: e.target.value,
+    sortOrder: localStorage.getItem('sortOrder'),
+    sortAlgorithm: localStorage.getItem('sortAlgorithm'),
+    sortBy: localStorage.getItem('sortBy'),
+    searchAlgorithm: searchAlgorithm.value
   };
 
   fetch('/search', {

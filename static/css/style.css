@@ -172,4 +172,7 @@ form{
 #searching-form{
     /* border-bottom:1.2px solid #ffe; */
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

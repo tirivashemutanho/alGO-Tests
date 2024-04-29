@@ -170,23 +170,41 @@ def sort_data():
 def search_data():
     all_students = list(students.find({}))
     search_term = request.json.get("searchTerm")
+    sort_order = request.json.get("sortOrder")
+    sort_algorithm = request.json.get("sortAlgorithm")
+    sort_by = request.json.get("sortBy")
+    search_algorithm = request.json.get("searchAlgorithm")
 
     matching_students = []  # Initialize with an empty list
 
-    if search_term:
+    if search_term and search_algorithm == 'binary_search':
         matching_students = binary_search(all_students, search_term)
-        matching_students = [{**student, "_id": str(student["_id"])} for student in matching_students]
-    else:
-        matching_students = students
-        
-    return jsonify(matching_students)
-
-
+    elif search_term and search_algorithm == 'linear_search':
+        matching_students = linear_search(all_students, search_term)
     
+    if search_term == '':
+        matching_students = all_students
     
+
+    if sort_algorithm == 'bubble_sort':
+        sorted_students = bubble_sort(matching_students, sort_by)
+    elif sort_algorithm == 'selection_sort':
+        sorted_students = selection_sort(matching_students, sort_by)
+    elif sort_algorithm == 'insertion_sort':
+        sorted_students = insertion_sort(matching_students, sort_by)
+    elif sort_algorithm == 'quick_sort':
+        sorted_students = quick_sort(matching_students, sort_by)
+    elif sort_algorithm == 'merge_sort':
+        sorted_students = merge_sort(matching_students, sort_by)
+
+    if sort_order == "descending":
+        sorted_students = reverse_list(sorted_students)
+
+    # Convert cursor object to a list of dictionaries and convert ObjectId to string
+    sorted_students = [{**student, "_id": str(student["_id"])} for student in sorted_students]
+
+    return jsonify(sorted_students)
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
-    
