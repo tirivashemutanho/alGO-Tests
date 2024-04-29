@@ -8,7 +8,14 @@
     
 </head>
 <body>
+  
     <section class="query-form">
+        <form action="" id="searching-form" method="POST">
+          <input type="text" placeholder="Search..." name="search_val" title="search_val" id="search-val">
+          <button type="button"><img src="../static/images/search.png" alt=""></button>
+        </form>
+        <div id="search-overlay"></div>
+
         <form id="sorting-form" method="post" action="{{ url_for('render_portal') }}">
             <div class="query-col">
                 <div class="input-row">

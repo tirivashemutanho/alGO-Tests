@@ -94,3 +94,33 @@ def reverse_list(lst):
         end -= 1
     
     return lst
+
+
+
+
+
+
+# def linear_search(students, search_string):
+#     matching_students = []
+#     if search_string == "":
+#         return students
+
+#     for student in students:
+#         if search_string.lower() in student["firstname"].lower() or \
+#            search_string.lower() in student["lastname"].lower() :
+#             matching_students.append(student)
+        
+
+#     return matching_students
+
+def linear_search(students, search_string):
+    matching_students = []
+    if search_string == "":
+        return students  # Return all students if search string is empty
+
+    for student in students:
+        if search_string.lower() in student.get("firstname", "").lower() or \
+           search_string.lower() in student.get("lastname", "").lower():
+            matching_students.append(student)
+
+    return matching_students

@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from operator import itemgetter
 from bson import ObjectId
 from time import time, perf_counter
-from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list
+from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list, linear_search
 
 
 app = Flask(__name__)
@@ -165,6 +165,26 @@ def sort_data():
     all_students = [{**student, "_id": str(student["_id"])} for student in all_students]
 
     return jsonify(all_students)
+
+@app.route("/search", methods=["POST"])
+def search_data():
+    all_students = list(students.find({}))
+    search_term = request.json.get("searchTerm")
+
+    matching_students = []  # Initialize with an empty list
+
+    if search_term:
+        matching_students = linear_search(all_students, search_term)
+        matching_students = [{**student, "_id": str(student["_id"])} for student in matching_students]
+    else:
+        matching_students = students
+        
+    return jsonify(matching_students)
+
+
+    
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,12 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const sortAlgorithm = document.getElementById('sort-algorithm');
   const sortBy = document.getElementById('sort-by');
   const sortOrder = document.getElementById('sort-order');
+  const search = document.getElementById('search-val');
 
   // Add change event listener for form submission
   sortingForm.addEventListener('submit', submitForm);
   sortAlgorithm.addEventListener('change', submitForm);
   sortBy.addEventListener('change', submitForm);
   sortOrder.addEventListener('change', submitForm);
+  search.addEventListener('keyup', searchStudent);
 
   function submitForm(e) {
     e.preventDefault();
@@ -47,8 +49,9 @@ function updateTable(data) {
 
   // Clear existing rows from the table
   tableBody.innerHTML = '';
+  
+  if (data.length > 0) {
   num = 1
-  // Append sorted rows back to the table
   data.forEach(student => {
     const row = document.createElement('tr');
     
@@ -72,6 +75,45 @@ function updateTable(data) {
     </td>
     `;
     tableBody.appendChild(row);
-  });
+  })}else{
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="13">Nothing was found</td>`;
+    tableBody.appendChild(row);
+  }
 }
+
+
+
+
+function searchStudent(e) {
+  const requestData = {
+    searchTerm: e.target.value
+  };
+
+  fetch('/search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestData)
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .then(data => {
+      updateTable(data);
+    })
+    .catch(error => {
+      console.error('Request error:', error);
+      // Handle the error here, e.g., display an error message to the user
+    });
+}
+
+
 });
+
+
