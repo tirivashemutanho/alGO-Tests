@@ -245,10 +245,3 @@ function sortByCol(col){
 }
 
 
-
-document.querySelectorAll('.button').forEach(anchor => {
-  anchor.addEventListener("click", (e) =>{
-    document.querySelector(this.getattribute("href")).scrollIntoView({behaviour: "smooth"});
-  })
-});
-

@@ -358,3 +358,44 @@ body{
     z-index: 2 ;
 }
 
+/* scroll arrow */
+.scroll-arrow{
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeBounce 5s infinite ;
+}
+.scroll-arrow-up{
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeBounceUp 5s infinite 2.5s;
+    opacity: 0;
+}
+.showcase .scroll-arrow-up {
+    display: none;
+}
+
+@keyframes fadeBounce{
+    0%, 20%, 50%, 80%, 100%{
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    40%{
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 
+
+@keyframes fadeBounceUp {
+    0%, 20%, 50%, 80%, 100% {
+      opacity: 0;
+      transform: translateY(0px);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-20px);
+    }
+  }
