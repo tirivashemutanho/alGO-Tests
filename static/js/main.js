@@ -1,11 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Get the sorting form
+// document.addEventListener('DOMContentLoaded', () => {
+  
   const sortingForm = document.getElementById('sorting-form');
   const sortAlgorithm = document.getElementById('sort-algorithm');
   const sortBy = document.getElementById('sort-by');
   const sortOrder = document.getElementById('sort-order');
   const search = document.getElementById('search-val');
   const searchAlgorithm = document.getElementById('search-algorithm');
+
+
+  // showcase transitions
+  const left = document.querySelector('.left');
+  const right = document.querySelector('.right');
+  const container = document.querySelector('.container');
+
+  left.addEventListener('mouseenter',() => {
+    container.classList.add('hover-left');
+  })
+  left.addEventListener('mouseleave',() => {
+      container.classList.remove('hover-left');
+
+  })
+  right.addEventListener('mouseenter',() => {
+      container.classList.add('hover-right');
+  })
+  right.addEventListener('mouseleave',() => {
+      container.classList.remove('hover-right');
+  })
+
 
   // Add change event listener for form submission
   sortingForm.addEventListener('submit', submitForm);
@@ -86,28 +107,29 @@ function updateTable(data) {
   }
 }
 
-
+function updateLocal(){
  // Retrieve stored values from local storage
-if (localStorage.getItem('sortAlgorithm')) {
-  sortAlgorithm.value = localStorage.getItem('sortAlgorithm');
+  if (localStorage.getItem('sortAlgorithm')) {
+    sortAlgorithm.value = localStorage.getItem('sortAlgorithm');
+  }
+
+  if (localStorage.getItem('sortBy')) {
+    sortBy.value = localStorage.getItem('sortBy');
+  }
+
+  if (localStorage.getItem('sortOrder')) {
+    sortOrder.value = localStorage.getItem('sortOrder');
+  }
+  if (localStorage.getItem('searchAlgorithm')) {
+    searchAlgorithm.value = localStorage.getItem('searchAlgorithm');
+  }
 }
 
-if (localStorage.getItem('sortBy')) {
-  sortBy.value = localStorage.getItem('sortBy');
-}
-
-if (localStorage.getItem('sortOrder')) {
-  sortOrder.value = localStorage.getItem('sortOrder');
-}
-if (localStorage.getItem('searchAlgorithm')) {
-  searchAlgorithm.value = localStorage.getItem('searchAlgorithm');
-}
-
-
-const storedSortOrder = localStorage.getItem('sortOrder');
-const storedSortAlgorithm = localStorage.getItem('sortAlgorithm');
-const storedSortBy = localStorage.getItem('sortBy');
-const storedsearchAlgorithm = localStorage.getItem('searchAlgorithm');
+var storedSortOrder = localStorage.getItem('sortOrder');
+var storedSortAlgorithm = localStorage.getItem('sortAlgorithm');
+var storedSortBy = localStorage.getItem('sortBy');
+var storedsearchAlgorithm = localStorage.getItem('searchAlgorithm');
+updateLocal()
 
 if (storedSortOrder) {
   const requestData = {
@@ -180,6 +202,53 @@ function searchStudent(e) {
 }
 
 
-});
 
+
+
+// });
+
+
+
+function sortByCol(col){
+  localStorage.setItem('sortBy', col);
+  updateLocal()
+  
+  const requestData = {
+    sortAlgorithm:   storedSortAlgorithm,
+    sortBy: col,
+    sortOrder:  storedSortOrder,
+    searchAlgorithm:  storedsearchAlgorithm
+  };
+
+
+    fetch('/sort', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Request failed');
+        }
+      })
+      .then(data => {
+        updateTable(data);
+      })
+      .catch(error => {
+        console.error('Request error:', error);
+        // Handle the error here, e.g., display an error message to the user
+      });
+}
+
+
+
+document.querySelectorAll('.button').forEach(anchor => {
+  anchor.addEventListener("click", (e) =>{
+    document.querySelector(this.getattribute("href")).scrollIntoView({behaviour: "smooth"});
+  })
+});
 

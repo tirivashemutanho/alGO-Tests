@@ -3,9 +3,6 @@ from pymongo import MongoClient
 import os
 import uuid
 from werkzeug.utils import secure_filename
-from operator import itemgetter
-from bson import ObjectId
-from time import time, perf_counter
 from algorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort, reverse_list, linear_search, binary_search
 
 
@@ -78,14 +75,14 @@ def index():
 
         # Insert student data into the database
         student_data = {
-            'firstname': firstname,
-            'lastname': lastname,
+            'firstname': firstname.title(),
+            'lastname': lastname.title(),
             'date_of_birth': date_of_birth,
-            'gender': gender,
+            'gender': gender.title(),
             'contact_number': contact_number,
             'email': email,
-            'address': address,
-            'program': program,
+            'address': address.title(),
+            'program': program.title(),
             'gpa': gpa,
             'accommodation': accommodation,
             'personal_doc_unique_filename': personal_doc_unique_filename,
@@ -137,11 +134,7 @@ def sort_data():
     session["sort_algorithm"] = sort_algorithm
     
 
-    if sort_by and sort_order and sort_algorithm:
-        # sort_by = sort_by or "firstname"
-        # sort_algorithm = sort_algorithm or "bubble_sort"
-       
-      
+    if sort_by and sort_order and sort_algorithm:  
       
         if sort_algorithm == 'bubble_sort':
             all_students = bubble_sort(all_students, sort_by)
@@ -158,7 +151,6 @@ def sort_data():
         
 
         if sort_order == "descending":
-            # Reverse the list if the sort_order is "descending"
             all_students = reverse_list(list(all_students))
 
     # Convert cursor object to a list of dictionaries and convert ObjectId to string
@@ -177,13 +169,12 @@ def search_data():
 
     matching_students = []  # Initialize with an empty list
 
-    if search_term and search_algorithm == 'binary_search':
+    if search_term or search_algorithm == 'binary_search':
         matching_students = binary_search(all_students, search_term)
-    elif search_term and search_algorithm == 'linear_search':
+    elif search_term or search_algorithm == 'linear_search':
         matching_students = linear_search(all_students, search_term)
     
-    if search_term == '':
-        matching_students = all_students
+    
     
 
     if sort_algorithm == 'bubble_sort':
@@ -200,7 +191,7 @@ def search_data():
     if sort_order == "descending":
         sorted_students = reverse_list(sorted_students)
 
-    # Convert cursor object to a list of dictionaries and convert ObjectId to string
+    
     sorted_students = [{**student, "_id": str(student["_id"])} for student in sorted_students]
 
     return jsonify(sorted_students)

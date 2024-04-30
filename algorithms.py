@@ -105,7 +105,7 @@ def reverse_list(lst):
 def linear_search(students, search_string):
     matching_students = []
     if search_string == "":
-        return students  # Return all students if search string is empty
+        matching_students = students  # Return all students if search string is empty
 
     for student in students:
         if search_string.lower() in str(student.get("firstname", "")).lower() or \
@@ -126,6 +126,8 @@ def linear_search(students, search_string):
 def binary_search(students, search_term):
     matching_students = []
 
+    if search_term == "":
+        matching_students = students  
     # Sort the students list
     students.sort(key=lambda x: x.get("firstname", "").lower())
     
@@ -152,5 +154,7 @@ def binary_search(students, search_term):
             right = mid - 1
         else:
             left = mid + 1
+            
+    
 
     return matching_students

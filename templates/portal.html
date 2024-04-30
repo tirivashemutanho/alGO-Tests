@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students Portal</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-    
 </head>
 <body>
-  
     <section class="query-form">
-    
         <form id="sorting-form" method="post" action="{{ url_for('render_portal') }}">
             <div class="query-col">
                 <div class="input-row">
@@ -39,7 +36,7 @@
             <div class="row">
                 <div class="input-row">
                     <select name="sort_by" title="sort_by" id="sort-by">
-                      <option value="firstname" disabled selected hidden>Sort by:</option>
+                      <option value="" disabled selected hidden>Sort by:</option>
                       <option value="firstname">Firstname</option>
                       <option value="lastname">Lastname</option>
                       <option value="date_of_birth">D.O.B</option>
@@ -69,6 +66,10 @@
                     <select name="search_algorithm" title="sort_order" id="search-algorithm">
                       <option value="linear_search" selected>Linear Search</option>
                       <option value="binary_search">Binary Search</option>
+                      <option value="hash_table_search">Hash Table Search</option>
+                      <option value="exponential_search">Exponential Search</option>
+                      <option value="interpolation_search">Interpolation Search</option>
+                      <option value="jump_search">Jump Search</option>
                     </select>
                 </div>
             </div>
@@ -80,17 +81,16 @@
           <thead>
             <tr>
                 <th></th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>D.O.B</th>
-                <th>Gender</th>
-                <th>Contact</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Program</th>
-                <th>GPA</th>
-                <th>Residence</th>
-               
+                <th onclick={sortByCol("firstname")}>Firstname</th>
+                <th onclick={sortByCol("lastname")}>Lastname</th>
+                <th onclick={sortByCol("date_of_birth")}>D.O.B</th>
+                <th onclick={sortByCol("gender")}>Gender</th>
+                <th onclick={sortByCol("contact_number")}>Contact</th>
+                <th onclick={sortByCol("email")}>Email</th>
+                <th onclick={sortByCol("address")}>Address</th>
+                <th onclick={sortByCol("program")}>Program</th>
+                <th onclick={sortByCol("gpa")}>GPA</th>
+                <th >Residence</th>
             </tr>
         </thead>
         <tbody>
