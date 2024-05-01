@@ -1,5 +1,5 @@
 // document.addEventListener('DOMContentLoaded', () => {
-  
+  const mainForm = document.getElementById('main-form');
   const sortingForm = document.getElementById('sorting-form');
   const sortAlgorithm = document.getElementById('sort-algorithm');
   const sortBy = document.getElementById('sort-by');
@@ -36,6 +36,14 @@
   search.addEventListener('keyup', searchStudent);
   search.addEventListener('event.key === "Enter"', searchStudent);
   searchAlgorithm.addEventListener('change', searchStudent);
+
+
+  mainForm.addEventListener('keyup', e=>{
+    if(e.keyCode == 13){
+        e.preventDefault();
+        submitForm();
+    }
+})
 
   function submitForm(e) {
     e.preventDefault();
@@ -244,4 +252,34 @@ function sortByCol(col){
       });
 }
 
+var backArrow = document.getElementById('back-arrow');
+var section1 = document.getElementById('showcase');
+var section2 = document.getElementById('query-implementation');
+var section3 = document.getElementById('registration-form');
+var lastScrollPosition = document.documentElement.scrollTop;
 
+function toggleBackArrowVisibility() {
+  var currentScrollPosition = document.documentElement.scrollTop;
+
+  if (currentScrollPosition <= section1.offsetTop) {
+    backArrow.classList.remove('show');
+  } else {
+    backArrow.classList.add('show');
+  }
+
+  lastScrollPosition = currentScrollPosition;
+}
+
+section1.addEventListener('click', function() {
+  backArrow.classList.add('show');
+});
+
+section2.addEventListener('click', function() {
+  backArrow.classList.remove('show');
+});
+
+section3.addEventListener('click', function() {
+  backArrow.classList.remove('show');
+});
+
+window.addEventListener('scroll', toggleBackArrowVisibility);

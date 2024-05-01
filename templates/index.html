@@ -8,7 +8,7 @@
 </head>
 <body>
     <main id="main-container">
-        <section class="showcase viewport100">
+        <section class="showcase viewport100" id="showcase">
             <div class="container">
                 <div class="split left" >
                     <h1>Student`s Application</h1>
@@ -29,6 +29,7 @@
                     </svg>
                 </div>
             </div>
+            
         </section>
         <section class="query-implementation viewport100" id="query-implementation">
             <section class="query-form">
@@ -98,17 +99,6 @@
                         </div>
                     </div>
                   </form>
-                  
-                <div class="scroll-arrow">
-                    <svg width="30px" height="20px">
-                        <path
-                            stroke="#ffffff" 
-                            fill="none" 
-                            stroke-width="2px"
-                            d="M2.000,5.000 L15.000,18.000 L28.000,5.000">
-                        </path>
-                    </svg>
-                </div>
             </section>
             <section class="students-show">
                 <table class="table" id="student-table">
@@ -145,15 +135,34 @@
                     </tr>
                     {% endfor %}           
                 </tbody> 
-          
+                <div class="scroll-arrow">
+                    <svg width="30px" height="20px">
+                        <path
+                            stroke="#ffffff" 
+                            fill="none" 
+                            stroke-width="2px"
+                            d="M2.000,5.000 L15.000,18.000 L28.000,5.000">
+                        </path>
+                    </svg>
+                </div>
+                <div class="scroll-arrow-up">
+                    <svg width="30px" height="20px">
+                        <path
+                          stroke="#ffffff" 
+                          fill="none" 
+                          stroke-width="2px"
+                          d="M2.000,18.000 L15.000,5.000 L28.000,18.000">
+                        </path>
+                      </svg>
+                    </div>
                 </table>
                 
+                <div class="back-arrow" id="back-arrow"><a href="#showcase"><img src="../static/images/back-arrow.png" alt=""></a></div>
             </section>
-            
         </section>
         <section class="registration-form viewport100" id="registration-form">
             <h1 class="form-header">Students Registration Portal</h1>
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="main-form">
                 <div class="row">
                     <div class="input50">
                         <input type="text" placeholder="First Name" name="firstname" title="firstname" required>
@@ -239,9 +248,10 @@
                           d="M2.000,18.000 L15.000,5.000 L28.000,18.000">
                         </path>
                       </svg>
-                </div>
-            </form>
-        </section>
+                    </div>
+                </form>
+                <div class="back-arrow" id="back-arrow"><a href="#query-implementation"><img src="../static/images/back-arrow.png" alt=""></a></div>
+            </section>
     </main>
 
     <script src="{{url_for('static', filename='js/main.js')}}"></script>

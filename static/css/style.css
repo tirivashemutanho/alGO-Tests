@@ -34,6 +34,7 @@ body{
     height: 100vh;
     scroll-snap-align: center;
     border-bottom: #ffe 2px solid;
+    position: relative;
 }
 
 .registration-form{
@@ -44,12 +45,14 @@ body{
 
 .registration-form form{
     width: 70%;
+    max-width: 520px;
     padding: 1px 5px;
     margin: auto;
     background: #ffe;
 }
 .form-header{
     width: 70%;
+    max-width: 520px;
     text-align: center;
     background: teal;
     color: #fff;
@@ -398,4 +401,30 @@ body{
       opacity: 1;
       transform: translateY(-20px);
     }
+  }
+
+  .back-arrow {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.119);
+    bottom: 50px;
+    right: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* opacity: 0; */
+    transition: opacity 1s ease-in;
+  }
+
+  .back-arrow.show {
+    opacity: 1;
+  }
+  .back-arrow img{
+    /* position: relative; */
+    width: 25px;
+    height: 35px;
+    margin: auto;
   }
