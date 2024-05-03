@@ -158,3 +158,84 @@ def binary_search(students, search_term):
     
 
     return matching_students
+
+# code for ternary search
+
+def ternary_search(students, search_term):
+  matching_students = []
+
+  if search_term == "":
+    return students  # All students if search term is empty
+  #sort the students lit
+  students.sort(key=lambda x: x.get("firstname", "").lower())
+  left = 0
+  right = len(students) - 1
+
+  while left <= right:
+    left_third = left + (right - left) // 3
+    right_third = right - (right - left) // 3
+
+    left_student = students[left_third]
+    right_student = students[right_third]
+
+    if search_term.lower() in str(left_student.get("firstname", "")).lower():
+      right = right_third
+    elif search_term.lower() in str(right_student.get("firstname", "")).lower():
+      left = left_third
+    else:
+      # Search term not found in middle thirds, check remaining portion
+      potential_matches = students[left + 1:right]
+      for student in potential_matches:
+        if search_term.lower() in str(student.get("firstname", "")).lower() or \
+           search_term.lower() in str(student.get("lastname", "")).lower() or \
+           search_term.lower() in str(student.get("date_of_birth", "")).lower() or \
+           search_term.lower() in str(student.get("gender", "")).lower() or \
+           search_term.lower() in str(student.get("contact_number", "")).lower() or \
+           search_term.lower() in str(student.get("email", "")).lower() or \
+           search_term.lower() in str(student.get("address", "")).lower() or \
+           search_term.lower() in str(student.get("program", "")).lower() or \
+           search_term.lower() in str(student.get("gpa", "")).lower() or \
+           search_term.lower() in str(student.get("accommodation", "")).lower():
+          
+           matching_students.append(student)
+      break
+
+  return matching_students
+
+#hash table search
+
+from collections import defaultdict
+
+def hash_table_search(students, search_term):
+
+  matching_students = []
+  search_term = search_term.lower()
+
+  # Create a hash table to store students by searchable fields (first and last name)
+  hash_table = defaultdict(list)
+  for student in students:
+    first_name = student.get("firstname", "").lower()
+    last_name = student.get("lastname", "").lower()
+    hash_table[first_name].append(student)
+    hash_table[last_name].append(student)
+
+  # Check for matches in first and last name fields
+  potential_matches = hash_table.get(search_term, []) + hash_table.get(search_term + " ", [])
+
+  # Loop through potential matches and check other fields if necessary
+  for student in potential_matches:
+    if (search_term in str(student.get("firstname", "")).lower() or
+        search_term in str(student.get("lastname", "")).lower() or
+        search_term.lower() in str(student.get("date_of_birth", "")).lower() or \
+        search_term.lower() in str(student.get("gender", "")).lower() or \
+        search_term.lower() in str(student.get("contact_number", "")).lower() or \
+        search_term.lower() in str(student.get("email", "")).lower() or \
+        search_term.lower() in str(student.get("address", "")).lower() or \
+        search_term.lower() in str(student.get("program", "")).lower() or \
+        search_term.lower() in str(student.get("gpa", "")).lower() or \
+        search_term.lower() in str(student.get("accommodation", "")).lower()):
+        matching_students.append(student)
+
+  return matching_students
+
+
