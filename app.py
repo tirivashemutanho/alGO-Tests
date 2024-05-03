@@ -146,6 +146,12 @@ def sort_data():
             all_students = quick_sort(all_students, sort_by)
         elif sort_algorithm == 'merge_sort':
             all_students = merge_sort(all_students, sort_by)
+        elif sort_algorithm == 'radix_sort':
+            all_students = radix_sort(all_students, sort_by)
+        elif sort_algorithm == 'bucket_sort':
+            all_students = bucket_sort(all_students, sort_by)
+        elif sort_algorithm == 'heap_sort':
+            all_students = heap_sort(all_students, sort_by)
         else:
             return jsonify(error='Invalid sort algorithm')
         
@@ -173,6 +179,9 @@ def search_data():
         matching_students = binary_search(all_students, search_term)
     elif search_term or search_algorithm == 'linear_search':
         matching_students = linear_search(all_students, search_term)
+    elif search_term or search_algorithm == 'ternary_search':
+        matching_students = ternary_search(all_students, search_term)
+    
     
     
     
@@ -187,6 +196,12 @@ def search_data():
         sorted_students = quick_sort(matching_students, sort_by)
     elif sort_algorithm == 'merge_sort':
         sorted_students = merge_sort(matching_students, sort_by)
+    elif sort_algorithm == 'radix_sort':
+        sorted_students = radix_sort(matching_students, sort_by)
+    elif sort_algorithm == 'bucket_sort':
+        sorted_students = bucket_sort(matching_students, sort_by)
+        elif sort_algorithm == 'heap_sort':
+        sorted_students = heap_sort(matching_students, sort_by)
 
     if sort_order == "descending":
         sorted_students = reverse_list(sorted_students)
