@@ -179,11 +179,7 @@ def search_data():
         matching_students = binary_search(all_students, search_term)
     elif search_term or search_algorithm == 'linear_search':
         matching_students = linear_search(all_students, search_term)
-    elif search_term or search_algorithm == 'ternary_search':
-        matching_students = ternary_search(all_students, search_term)
-    elif search_term or search_algorithm == 'hash_table_searchh':
-        matching_students = hash_table_search(all_students, search_term)
-    
+  
     
     
     
