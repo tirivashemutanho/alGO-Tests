@@ -81,7 +81,59 @@ def merge_sort(students, key):
     right = merge_sort(students[mid:], key)
     
     return merge(left, right, key)
+    
+# bucket sort
+def bucket_sort(students, key, num_buckets=10):
+  buckets = [[] for _ in range(num_buckets)]
+    
+  max_key = max(student[key] for student in students)
+  min_key = min(student[key] for student in students)
+  range_per_bucket = (max_key - min_key) / num_buckets
 
+  for student in students:
+    bucket_index = int((student[key] - min_key) // range_per_bucket)
+    buckets[bucket_index].append(student)
+  for bucket in buckets:
+    bucket.sort(key=lambda x: x[key])
+  sorted_students = []
+  for bucket in buckets:
+    sorted_students.extend(bucket)
+
+  return sorted_students
+
+
+#  radix sort
+def radix_sort(students, key):
+  
+  max_value = max(student[key] for student in students)
+  num_digits = len(str(max_value))
+  for digit in range(num_digits):
+    buckets = [[] for _ in range(10)]
+    for student in students:
+      digit_value = (student[key] // (10**digit)) % 10  # Extract the current digit
+      buckets[digit_value].append(student)
+    students = []
+    for bucket in buckets:
+      students.extend(bucket)
+
+  return students
+
+
+#heap sort
+import heapq
+
+def heap_sort(students, key):
+
+
+  heap = []
+  for student in students:
+    heapq.heappush(heap, (-student[key], student))
+  sorted_students = []
+  while heap:
+    _, student = heapq.heappop(heap)
+    sorted_students.append(student)
+
+  return sorted_students
 
 
 def reverse_list(lst):
@@ -166,7 +218,6 @@ def ternary_search(students, search_term):
 
   if search_term == "":
     return students  # All students if search term is empty
-  #sort the students lit
   students.sort(key=lambda x: x.get("firstname", "").lower())
   left = 0
   right = len(students) - 1
@@ -210,8 +261,7 @@ def hash_table_search(students, search_term):
 
   matching_students = []
   search_term = search_term.lower()
-
-  # Create a hash table to store students by searchable fields (first and last name)
+    
   hash_table = defaultdict(list)
   for student in students:
     first_name = student.get("firstname", "").lower()
@@ -219,10 +269,8 @@ def hash_table_search(students, search_term):
     hash_table[first_name].append(student)
     hash_table[last_name].append(student)
 
-  # Check for matches in first and last name fields
   potential_matches = hash_table.get(search_term, []) + hash_table.get(search_term + " ", [])
 
-  # Loop through potential matches and check other fields if necessary
   for student in potential_matches:
     if (search_term in str(student.get("firstname", "")).lower() or
         search_term in str(student.get("lastname", "")).lower() or
@@ -238,4 +286,7 @@ def hash_table_search(students, search_term):
 
   return matching_students
 
+
+# added the following sort algorithms: bucket sort, heap sort, radiz sort, 
+# added the following search algorithms: ternary search, hash table
 
