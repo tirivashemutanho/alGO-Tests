@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Portal</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"> 
+</head>
+<body>
+    <main id="main-container">
+        <section class="showcase viewport100" id="showcase">
+            <div class="container">
+                <div class="split left" >
+                    <h1>Student`s Application</h1>
+                    <a href="#registration-form" class="button" id="goto-registration-form">Apply</a>
+                </div>
+                <div class="split right">
+                    <h1>Searching And Sorting</h1>
+                    <a href="#query-implementation" class="button" id="goto-query-implementation">Student Database</a>
+                </div>
+                <div class="scroll-arrow">
+                    <svg width="30px" height="20px">
+                        <path
+                            stroke="#ffffff" 
+                            fill="none" 
+                            stroke-width="2px"
+                            d="M2.000,5.000 L15.000,18.000 L28.000,5.000">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            
+        </section>
+        <section class="query-implementation viewport100" id="query-implementation">
+            <div class="query-form">
+                <form id="sorting-form" method="post" action="{{ url_for('render_portal') }}">
+                    <div class="query-col">
+                        <div class="input-row">
+                            <select name="sort_algorithm" title="sort_algorithm" id="sort-algorithm">
+                              <option value="" disabled selected hidden>Sorting Algorithm:</option>
+                              <option value="bubble_sort">Bubble Sort</option>
+                              <option value="selection_sort">Selection Sort</option>
+                              <option value="insertion_sort">Insertion Sort</option>
+                              <option value="merge_sort">Merge Sort</option>
+                              <option value="quick_sort">Quick Sort</option>
+                              <option value="heap_sort">Heap Sort</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-row">
+                            <select name="sort_by" title="sort_by" id="sort-by">
+                              <option value="" disabled selected hidden>Sort by:</option>
+                              <option value="firstname">Firstname</option>
+                              <option value="lastname">Lastname</option>
+                              <option value="date_of_birth">D.O.B</option>
+                              <option value="gender">Gender</option>
+                              <option value="contact_number">Contact Number</option>
+                              <option value="email">Email</option>
+                              <option value="address">Address</option>
+                              <option value="program">Program</option>
+                              <option value="gpa">GPA</option>
+                            
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-row">
+                            <select name="sort_order" title="sort_order" id="sort-order">
+                              <option value="ascending" selected>Ascending</option>
+                              <option value="descending">Descending</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <form action="" id="searching-form" method="POST" onsubmit='return false;'>
+                    <input type="text" placeholder="Search..." name="search_val" title="search_val" id="search-val">
+                    <div class="row">
+                        <div class="input-row">
+                            <select name="search_algorithm" title="sort_order" id="search-algorithm">
+                              <option value="linear_search" selected>Linear Search</option>
+                              <option value="binary_search">Binary Search</option>
+                              <option value="hash_table_search">Hash Table Search</option>
+                              <option value="exponential_search">Exponential Search</option>
+                              <option value="interpolation_search">Interpolation Search</option>
+                              <option value="ternary_search">Ternary Search</option>
+                              <option value="jump_search">Jump Search</option>
+                            </select>
+                        </div>
+                    </div>
+                  </form>
+            </div>
+            <div class="students-show">
+                <table class="table" id="student-table">
+                  <thead>
+                    <tr>
+                        <th></th>
+                        <th onclick={sortByCol("firstname")}>Firstname</th>
+                        <th onclick={sortByCol("lastname")}>Lastname</th>
+                        <th onclick={sortByCol("date_of_birth")}>D.O.B</th>
+                        <th onclick={sortByCol("gender")}>Gender</th>
+                        <th onclick={sortByCol("contact_number")}>Contact</th>
+                        <th onclick={sortByCol("email")}>Email</th>
+                        <th onclick={sortByCol("address")}>Address</th>
+                        <th onclick={sortByCol("program")}>Program</th>
+                        <th onclick={sortByCol("gpa")}>GPA</th>
+                        <th >Res</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{student.firstname}}</td>
+                        <td>{{student.lastname}}</td>
+                        <td>{{student.date_of_birth}}</td>
+                        <td>{{student.gender}}</td>
+                        <td>{{student.contact_number}}</td>
+                        <td>{{student.email}}</td>
+                        <td>{{student.address}}</td>
+                        <td>{{student.program}}</td>
+                        <td>{{student.gpa}}</td>
+                        <td>{{student.accommodation}}</td>
+                        <td><button class="del-btn" onclick={deleteStudent({student._id})}>X</button></td>
+                    </tr>
+                    {% endfor %}           
+                </tbody> 
+                <div class="scroll-arrow">
+                    <svg width="30px" height="20px">
+                        <path
+                            stroke="#ffffff" 
+                            fill="none" 
+                            stroke-width="2px"
+                            d="M2.000,5.000 L15.000,18.000 L28.000,5.000">
+                        </path>
+                    </svg>
+                </div>
+                <div class="scroll-arrow-up">
+                    <svg width="30px" height="20px">
+                        <path
+                          stroke="#ffffff" 
+                          fill="none" 
+                          stroke-width="2px"
+                          d="M2.000,18.000 L15.000,5.000 L28.000,18.000">
+                        </path>
+                      </svg>
+                    </div>
+                </table>
+                
+                <div class="back-arrow" id="back-arrow"><a href="#showcase"><img src="../static/images/back-arrow.png" alt=""></a></div>
+            </div>
+        </section>
+
+        <section class="registration-form viewport100" id="registration-form">
+                {% if alert_message %}
+                <script>
+                    alert("{{ alert_message }}")
+                </script>
+                {% endif %}
+                <h1 class="form-header">Students Registration Portal</h1>
+                <form method="POST" enctype="multipart/form-data" id="main-form">
+                <div class="row">
+                    <div class="input50">
+                        <input type="text" placeholder="First Name" name="firstname" title="firstname" required>
+                    </div>
+                    <div class="input50">
+                        <input type="text" placeholder="Last Name" name="lastname" title="lastname" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input50">
+                        <input type="date" placeholder="Date of Birth" name="date_of_birth" title="date_of_birth" required>
+                    </div>
+                    <div class="input50">
+                        <select name="gender" title="gender" required>
+                            <option value="" disabled selected hidden>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <input type="text" placeholder="Contact Number" name="contact_number" title="contact_number" required>
+                    </div>
+                    <div class="input100">
+                        <input type="email" placeholder="Email" name="email" title="email" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <textarea placeholder="Address" name="address" title="address" required></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <select name="program" title="program" required>
+                            <option value="" disabled selected hidden>Select Program of Study</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medicine">Medicine</option>
+                            <option value="Law">Law</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <input type="number" step="0.01" min="0" max="4" placeholder="GPA" name="gpa" title="gpa" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100 input-check">
+                        <label for="accommodatio">Would you like On-Campus Accommodation</label>
+                        <input type="checkbox" id="accommodation" name="accommodation" title="accommodation" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <input type="file" name="academic_transcripts" title="academic_transcripts" required>
+                        <label>Upload Academic Transcripts (PDF, Max file size: 10MB)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <input type="file" name="personal_doc" title="personal_doc">
+                        <label>Upload (ID, Passport, Drivers` License) Documents (PDF, Max file size: 10MB)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input100">
+                        <input type="submit" value="Submit">
+                    </div>
+                </div>
+                <div class="scroll-arrow-up">
+                    <svg width="30px" height="20px">
+                        <path
+                          stroke="#000000" 
+                          fill="none" 
+                          stroke-width="2px"
+                          d="M2.000,18.000 L15.000,5.000 L28.000,18.000">
+                        </path>
+                      </svg>
+                    </div>
+                </form>
+                <div class="back-arrow" id="back-arrow"><a href="#query-implementation"><img src="../static/images/back-arrow.png" alt=""></a></div>
+            
+    
+        </section>
+        </main>
+
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+</body>
+
+</html>
