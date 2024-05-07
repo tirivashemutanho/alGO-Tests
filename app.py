@@ -5,8 +5,9 @@ import uuid
 from bson import ObjectId
 from werkzeug.utils import secure_filename
 from sortingalgorithms import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort,heap_sort
-from searchingalgorithms import linear_search, binary_search, hash_table_search, interpolation_search, ternary_search
-
+from searchingalgorithms import linear_search, binary_search ,exponential_search,hash_table_search, interpolation_search, ternary_search
+import matplotlib.pyplot as plt
+import numpy as np
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -21,6 +22,8 @@ app.secret_key = secret_key
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.config['STATIC_FOLDER'] = 'static'
 
 
 def create_upload_folder():
@@ -173,6 +176,7 @@ def search_data():
     search_term = request.json.get("searchTerm")
     search_algorithm = request.json.get("searchAlgorithm")
 
+    matching_students = []  # Initialize matching_students as an empty list
 
     if search_algorithm == 'binary_search':
         matching_students = binary_search(all_students, search_term)
@@ -184,12 +188,18 @@ def search_data():
         matching_students = interpolation_search(all_students, search_term)
     elif search_algorithm == 'ternary_search':
         matching_students = ternary_search(all_students, search_term)
-    
+    elif search_algorithm == 'exponential_search':
+        matching_students = exponential_search(all_students, search_term)
 
+   
+    if not isinstance(matching_students, list):
+        matching_students = []
 
-    matching_students = [{**student, "_id": str(student["_id"])} for student in matching_students]
+  
+    matching_students = [{**student, "_id": str(student["_id"])} if isinstance(student, dict) else student for student in matching_students]
 
     return jsonify(matching_students)
+
 
 
 @app.route("/delete", methods=["POST"])
@@ -202,5 +212,74 @@ def delete_data():
     return jsonify(all_students)
 
 
+@app.route("/plot", methods=["GET"])
+def plot_data():
+    all_students = list(students.find({}))
+    
+    subjects_applied = {}
+    total_gpa = 0
+    males = 0
+    females = 0
+    
+    for student in all_students:
+        if student['gender'] == 'Male':
+            males += 1
+        else:
+            females += 1
+        
+    for student in all_students:
+        program = student.get('program')
+        gpa = float(student.get('gpa'))
+        
+        # Count the number of applicants for each subject
+        subjects_applied[program] = int(subjects_applied.get(program, 0) + 1)
+        total_gpa += gpa
+
+    
+    # Plotting
+    
+    # plot pie chart for gender balance
+    labels = ['Males', 'Females']
+    sizes = [males, females]
+    colors = ['#4c72b0', '#c44e52']
+    explode = (0.1, 0)  
+
+    plt.figure(figsize=(8, 6))
+    plt.pie(sizes, labels=labels, explode=explode, colors=colors, autopct='%1.1f%%', startangle=90, shadow=True)
+    plt.title('Gender Balance', fontweight='bold', fontsize=14)
+    plt.axis('equal')
+    gender_plot_path = os.path.join(app.config['STATIC_FOLDER'], 'images', 'gender_balance.png')
+    plt.savefig(gender_plot_path)
+    plt.close()
+    
+    
+    # Plot bar chart for subjects applied
+    plt.figure(figsize=(10, 6))
+    plt.bar(subjects_applied.keys(), subjects_applied.values(), color='#4c72b0')
+    plt.xlabel('Subjects', fontweight='bold', fontsize=12)
+    plt.ylabel('Number of Applicants', fontweight='bold', fontsize=12)
+    plt.title('Number of Applicants for Each Subject', fontweight='bold', fontsize=14)
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    subjects_plot_path = os.path.join(app.config['STATIC_FOLDER'], 'images', 'subjects_applied.png')
+    plt.savefig(subjects_plot_path)
+    plt.close()
+
+    # Plot histogram for GPA distribution
+    plt.figure(figsize=(10, 6))
+    plt.hist([float(student.get('gpa')) for student in all_students], bins=10, color='#4c72b0', edgecolor='white')
+    plt.xlabel('GPA', fontweight='bold', fontsize=12)
+    plt.ylabel('Frequency', fontweight='bold', fontsize=12)
+    plt.title('Distribution of GPA', fontweight='bold', fontsize=14)
+    plt.xticks(np.arange(0, 5.5, 0.5))
+    plt.yticks(np.arange(0, 20, 2))
+    plt.grid(axis='y', alpha=0.5)
+    plt.tight_layout()
+    gpa_plot_path = os.path.join(app.config['STATIC_FOLDER'], 'images', 'gpa_distribution.png')
+    plt.savefig(gpa_plot_path)
+    plt.close()
+
+    return render_template("index.html", subjects_plot_path=subjects_plot_path, gpa_plot_path=gpa_plot_path, gender_plot_path=gender_plot_path)
+    
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True , threaded=False)

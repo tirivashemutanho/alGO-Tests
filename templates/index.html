@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students Portal</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"> 
+    <link rel="stylesheet" href="{{url_for('static', filename='css/slider.css')}}"> 
 </head>
 <body>
     <main id="main-container">
@@ -84,7 +85,6 @@
                               <option value="exponential_search">Exponential Search</option>
                               <option value="interpolation_search">Interpolation Search</option>
                               <option value="ternary_search">Ternary Search</option>
-                              <option value="jump_search">Jump Search</option>
                             </select>
                         </div>
                     </div>
@@ -148,8 +148,41 @@
                 </table>
                 
                 <div class="back-arrow" id="back-arrow"><a href="#showcase"><img src="../static/images/back-arrow.png" alt=""></a></div>
+                <form action="{{ url_for('plot_data') }}" method="GET" class="graph-form">
+                    <button id="plot-btn-submit">Plot Graphs</button>
+                    <button type="button" id="plot-btn">View Graphs</button>
+                </form>
             </div>
         </section>
+        <section class="viewport100 main-slider" id="main-slider">
+            <div class="slider">
+                <div class="slide current">
+                    <div class="content">
+                        <h1>Subjects Distribution</h1>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/subjects_applied.png') }}" class="img-graph">
+                </div>
+                <div class="slide">
+                    <div class="content">
+                        <h1>GPA Distribution</h1>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/gpa_distribution.png') }}" class="img-graph">
+                </div> 
+                <div class="slide">
+                    <div class="content">
+                        <h1>Gender Balance</h1>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/gender_balance.png') }}" class="img-graph">
+                </div> 
+            </div>
+            <div class="buttons">
+                <button id="prev"><img src="{{ url_for('static', filename='images/arrow-left.png') }}"></button>
+                <button id="next"><img src="{{ url_for('static', filename='images/arrow-right.png') }}"></button>
+                <button id="close"><img src="{{ url_for('static', filename='images/close.png') }}"></button>
+            </div>
+        </section>
+
+      
 
         <section class="registration-form viewport100" id="registration-form">
                 {% if alert_message %}
@@ -253,6 +286,8 @@
         </main>
 
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    <script src="{{url_for('static', filename='js/slider.js')}}"></script>
+    
 </body>
 
 </html>

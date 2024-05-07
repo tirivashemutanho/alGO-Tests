@@ -168,7 +168,7 @@ search.addEventListener('keydown', e=>{
 function searchStudent(e) {
   e.preventDefault();
   const requestData = {
-    searchTerm: e.target.value == '' ? 'student' : e.target.value,
+    searchTerm: e.target.value,
     sortOrder: localStorage.getItem('sortOrder'),
     sortAlgorithm: localStorage.getItem('sortAlgorithm'),
     sortBy: localStorage.getItem('sortBy'),

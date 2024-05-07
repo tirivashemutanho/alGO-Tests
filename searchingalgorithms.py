@@ -1,11 +1,14 @@
 def linear_search(students, search_string):
     matching_students = []
+
+    if not search_string:  
+        return students 
+
     if search_string == "student": 
-        for student in students:
-            matching_students.extend(student)
-        return matching_students  
+        return students  
 
     for student in students:
+       
         if search_string.lower() in str(student.get("firstname", "")).lower() or \
            search_string.lower() in str(student.get("lastname", "")).lower() or \
            search_string.lower() in str(student.get("date_of_birth", "")).lower() or \
@@ -17,19 +20,19 @@ def linear_search(students, search_string):
            search_string.lower() in str(student.get("gpa", "")).lower() or \
            search_string.lower() in str(student.get("accommodation", "")).lower():
             matching_students.append(student)
+            
     return matching_students
 
-
 def binary_search(students, search_string):
-    
     matching_students = []
+
+    if not search_string:  
+        return students  
+
     if search_string == "student":
-       for student in students:
-           matching_students.extend(student)
-       return matching_students  
-        
-        
-    # Sort the students list
+        return students  
+
+    
     students.sort(key=lambda x: x.get("firstname", "").lower())
     
     left = 0
@@ -60,34 +63,48 @@ def binary_search(students, search_string):
 
 
 def hash_table_search(students, search_string):
-        matching_students = []
-        if search_string == "student":
-            for student in students:
-                matching_students.extend(student)
-            return matching_students
+    matching_students = []
 
-        for student in students[(hash(search_string))]:
-            if search_string.lower() in student.firstname.lower() or \
-               search_string.lower() in student.lastname.lower() or \
-               search_string.lower() in student.date_of_birth.lower() or \
-               search_string.lower() in student.gender.lower() or \
-               search_string.lower() in student.contact_number.lower() or \
-               search_string.lower() in student.email.lower() or \
-               search_string.lower() in student.address.lower() or \
-               search_string.lower() in student.program.lower() or \
-               search_string.lower() in str(student.gpa).lower() or \
-               search_string.lower() in student.accommodation.lower():
+    if not search_string:  
+        return students  
+
+    if search_string == "student":
+        return students 
+
+    hash_table = {}
+    for student in students:
+        key = hash(student['firstname']) % len(students)
+        if key not in hash_table:
+            hash_table[key] = []
+        hash_table[key].append(student)
+
+    # Search for the student
+    search_key = hash(search_string) % len(students)
+    if search_key in hash_table:
+        for student in hash_table[search_key]:
+            if (search_string.lower() in student['firstname'].lower() or
+                search_string.lower() in student['lastname'].lower() or
+                search_string.lower() in student['date_of_birth'].lower() or
+                search_string.lower() in student['gender'].lower() or
+                search_string.lower() in student['contact_number'].lower() or
+                search_string.lower() in student['email'].lower() or
+                search_string.lower() in student['address'].lower() or
+                search_string.lower() in student['program'].lower() or
+                search_string.lower() in str(student['gpa']).lower() or
+                search_string.lower() in str(student['accommodation']).lower()):
                 matching_students.append(student)
 
-        return matching_students
+    return matching_students
 
 
 def interpolation_search(students, search_string):
     matching_students = []
+
+    if not search_string:  
+        return students 
+
     if search_string == "student":
-       for student in students:
-           matching_students.extend(student)
-       return matching_students  
+        return students  
 
     low = 0
     high = len(students) - 1
@@ -120,30 +137,117 @@ def interpolation_search(students, search_string):
 
     return matching_students
 
+
 def ternary_search(students, search_string):
-  matching_students = []
 
-  if search_string == "student":
-    return students  # All students if search term is empty
-  students.sort(key=lambda x: x.get("firstname", "").lower())
-  left = 0
-  right = len(students) - 1
 
-  while left <= right:
-    left_third = left + (right - left) // 3
-    right_third = right - (right - left) // 3
+    matching_students = []
 
-    left_student = students[left_third]
-    right_student = students[right_third]
+    if not search_string:  
+        return students  
+
+    if search_string == "student":
+        return students  
+
+    students.sort(key=lambda x: x.get("firstname", "").lower())
+    left = 0
+    right = len(students) - 1
+
+    while left <= right:
+        left_third = left + (right - left) // 3
+        right_third = right - (right - left) // 3
+
+        left_student = students[left_third]
+        right_student = students[right_third]
+
+        if search_string.lower() in str(left_student.get("firstname", "")).lower():
+            right = right_third
+        elif search_string.lower() in str(right_student.get("firstname", "")).lower():
+            left = left_third
+        else:
+            
+            potential_matches = students[left + 1:right]
+            for student in potential_matches:
+                if search_string.lower() in str(student.get("firstname", "")).lower() or \
+                   search_string.lower() in str(student.get("lastname", "")).lower() or \
+                   search_string.lower() in str(student.get("date_of_birth", "")).lower() or \
+                   search_string.lower() in str(student.get("gender", "")).lower() or \
+                   search_string.lower() in str(student.get("contact_number", "")).lower() or \
+                   search_string.lower() in str(student.get("email", "")).lower() or \
+                   search_string.lower() in str(student.get("address", "")).lower() or \
+                   search_string.lower() in str(student.get("program", "")).lower() or \
+                   search_string.lower() in str(student.get("gpa", "")).lower() or \
+                   search_string.lower() in str(student.get("accommodation", "")).lower():
+                    matching_students.append(student)
+            break
+
+    return matching_students
+
+
+    if not search_string: 
+            return students
+    matching_students = []
+
+    if search_string == "student":
+        return students  
+    students.sort(key=lambda x: x.get("firstname", "").lower())
+    left = 0
+    right = len(students) - 1
+
+    while left <= right:
+        left_third = left + (right - left) // 3
+        right_third = right - (right - left) // 3
+
+        left_student = students[left_third]
+        right_student = students[right_third]
 
     if search_string.lower() in str(left_student.get("firstname", "")).lower():
       right = right_third
     elif search_string.lower() in str(right_student.get("firstname", "")).lower():
       left = left_third
     else:
-      # Search term not found in middle thirds, check remaining portion
-      potential_matches = students[left + 1:right]
-      for student in potential_matches:
+     
+        potential_matches = students[left + 1:right]
+        for student in potential_matches:
+            if search_string.lower() in str(student.get("firstname", "")).lower() or \
+                search_string.lower() in str(student.get("lastname", "")).lower() or \
+                search_string.lower() in str(student.get("date_of_birth", "")).lower() or \
+                search_string.lower() in str(student.get("gender", "")).lower() or \
+                search_string.lower() in str(student.get("contact_number", "")).lower() or \
+                search_string.lower() in str(student.get("email", "")).lower() or \
+                search_string.lower() in str(student.get("address", "")).lower() or \
+                search_string.lower() in str(student.get("program", "")).lower() or \
+                search_string.lower() in str(student.get("gpa", "")).lower() or \
+                search_string.lower() in str(student.get("accommodation", "")).lower():
+                
+                matching_students.append(student)
+            break
+
+    return matching_students
+
+
+def exponential_search(students, search_string):
+    matching_students = []
+
+    if not search_string:  
+        return students  # Return all students if the search term is empty
+
+    if search_string == "student":
+        return students  # Return all students if the search term is "student"
+
+    # Find the range for binary search
+    bound = 1
+    while bound < len(students) and search_string.lower() not in str(students[bound].get("firstname", "")).lower():
+        bound *= 2
+
+    left = bound // 2
+    right = min(bound, len(students) - 1)
+
+    # Perform binary search in the found range
+    while left <= right:
+        mid = (left + right) // 2
+        student = students[mid]
+
         if search_string.lower() in str(student.get("firstname", "")).lower() or \
            search_string.lower() in str(student.get("lastname", "")).lower() or \
            search_string.lower() in str(student.get("date_of_birth", "")).lower() or \
@@ -154,8 +258,11 @@ def ternary_search(students, search_string):
            search_string.lower() in str(student.get("program", "")).lower() or \
            search_string.lower() in str(student.get("gpa", "")).lower() or \
            search_string.lower() in str(student.get("accommodation", "")).lower():
-          
-           matching_students.append(student)
-      break
+            matching_students.append(student)
 
-  return matching_students
+        if search_string.lower() < str(student.get("firstname", "")).lower():
+            right = mid - 1
+        else:
+            left = mid + 1
+            
+    return matching_students
